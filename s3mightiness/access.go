@@ -5,7 +5,14 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 )
 
-func S3Access() *aws.Config {
+type Prop struct {
+	AccessKey       string
+	SecretKey       string
+	ServiceEndpoint string
+	Region          string
+}
+
+func (prop *Prop) S3Access() *aws.Config {
 	// /*aws.Configかんたんまとめ
 	// s3Config := &aws.Config{
 	// 	//認証情報オブジェクト
@@ -41,9 +48,9 @@ func S3Access() *aws.Config {
 	// }*/
 
 	return &aws.Config{
-		Credentials:      credentials.NewStaticCredentials("hogehoge", "hogehoge", ""),
-		Endpoint:         aws.String("http://127.0.0.1:9001"),
-		Region:           aws.String("us-east-1"),
+		Credentials:      credentials.NewStaticCredentials(prop.AccessKey, prop.SecretKey, ""),
+		Endpoint:         aws.String(prop.ServiceEndpoint),
+		Region:           aws.String(prop.Region),
 		DisableSSL:       aws.Bool(true),
 		S3ForcePathStyle: aws.Bool(true),
 	}

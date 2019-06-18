@@ -1,7 +1,6 @@
 package s3mightiness
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -10,25 +9,26 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
-func S3Download(bucket string, key string, fileRoot string) {
-	newSession := session.New(S3Access())
+func S3Download(newSession *session.Session, bucket string, key string, fileRoot string) error {
 
+	//ローカルにファイル生成
 	file, err := os.Create(fileRoot)
 	if err != nil {
-		fmt.Println("Failed to create file", err)
-		return
+		return err
 	}
 	defer file.Close()
 
+	//ファイルをダウンロード
 	downloader := s3manager.NewDownloader(newSession)
-	numBytes, err := downloader.Download(file,
+	_, err = downloader.Download(file,
 		&s3.GetObjectInput{
 			Bucket: aws.String(bucket),
 			Key:    aws.String(key),
 		})
 	if err != nil {
-		fmt.Println("Failed to download file", err)
-		return
+		//エラーから取れる情報(awsErr.Code(), awsErr.Message(), awsErr.OrigErr())
+		return err
+	} else {
+		return nil
 	}
-	fmt.Println("Downloaded file", file.Name(), numBytes, "bytes")
 }

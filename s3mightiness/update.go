@@ -1,7 +1,6 @@
 package s3mightiness
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -9,19 +8,17 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
-func S3Update(bucket string, key string) {
-
-	newSession := session.New(S3Access())
+func S3Update(newSession *session.Session, bucket string, key string) error {
 	s3Client := s3.New(newSession)
-
 	_, err := s3Client.PutObject(&s3.PutObjectInput{
 		Body:   strings.NewReader("Hello from MinIO!!"),
 		Bucket: aws.String(bucket),
 		Key:    aws.String(key),
 	})
 	if err != nil {
-		fmt.Printf("Failed to upload data to %s/%s, %s\n", bucket, key, err.Error())
-		return
+		//エラーから取れる情報(awsErr.Code(), awsErr.Message(), awsErr.OrigErr())
+		return err
+	} else {
+		return nil
 	}
-	fmt.Printf("Successfully created bucket %s and uploaded data with key %s\n", bucket, key)
 }

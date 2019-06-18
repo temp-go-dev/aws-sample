@@ -1,15 +1,12 @@
 package s3mightiness
 
 import (
-	"fmt"
-
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
-func S3Cpoy(bucket string, item string, other string) {
-	newSession := session.New(S3Access())
+func S3Cpoy(newSession *session.Session, bucket string, item string, other string) error {
 	s3Client := s3.New(newSession)
 
 	/*Bucket:コピー先bucket
@@ -19,7 +16,9 @@ func S3Cpoy(bucket string, item string, other string) {
 	_, err := s3Client.CopyObject(&s3.CopyObjectInput{Bucket: aws.String(bucket), CopySource: aws.String(item), Key: aws.String(other)})
 
 	if err != nil {
-		fmt.Printf("Failed to copy", err.Error())
-		return
+		//エラーから取れる情報(awsErr.Code(), awsErr.Message(), awsErr.OrigErr())
+		return err
+	} else {
+		return nil
 	}
 }
