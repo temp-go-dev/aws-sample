@@ -1,4 +1,4 @@
-module sample
+module github.com/S3Sample
 
 go 1.12
 
