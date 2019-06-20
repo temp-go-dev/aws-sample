@@ -1,7 +1,7 @@
 package main
 
 import (
-	"sample/s3mightiness"
+	"sample/S3Sample/s3mightiness"
 
 	"github.com/aws/aws-sdk-go/aws/session"
 )
