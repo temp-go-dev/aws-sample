@@ -1,4 +1,4 @@
-module github.com/S3Sample
+module github.com/temp-go-dev/aws-sample
 
 go 1.12
 
